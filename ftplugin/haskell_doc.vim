@@ -85,13 +85,17 @@ elseif executable(g:ghc_pkg)
 " try to figure out location of html docs
 " first choice: where the base docs are (from the first base listed)
   let [field;x] = split(system(g:ghc_pkg . ' field base haddock-html'),'\n')
-  let field = substitute(field,'haddock-html: \(.*\)libraries.base','\1','')
+  " path changes in ghc-6.12.*
+  " let field = substitute(field,'haddock-html: \(.*\)libraries.base','\1','')
+  let field = substitute(field,'haddock-html: \(.*\)lib\(raries\)\?.base.*$','\1','')
   let field = substitute(field,'\\','/','g')
-  let alternate = substitute(field,'html','doc/html','')
-  if isdirectory(field)
-    let s:docdir = field
-  elseif isdirectory(alternate)
+  " let alternate = substitute(field,'html','doc/html','')
+  " changes for ghc-6.12.*: check for doc/html/ first
+  let alternate = field.'doc/html/'
+  if isdirectory(alternate)
     let s:docdir = alternate
+  elseif isdirectory(field)
+    let s:docdir = field
   endif
 else
   echoerr s:scriptname." can't find ghc-pkg (set g:ghc_pkg ?)."
@@ -465,7 +469,7 @@ function! MkHaddockModuleIndex()
       let html = dict[module]
       let html   = substitute(html  ,'#.*$','','')
       let module = substitute(module,'\[.\]','','')
-      let ml = matchlist(html,'libraries/\([^\/]*\)\/')
+      let ml = matchlist(html,'libraries/\([^\/]*\)[\/]')
       if ml!=[]
         let [_,package;x] = ml
         let g:haddock_moduleindex[module] = {'package':package,'html':html}
