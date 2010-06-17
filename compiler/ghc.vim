@@ -448,14 +448,15 @@ function! GHC_MkImportsExplicit()
 endfunction
 
 if GHC_VersionGE([6,8,2])
-  let opts = filter(split(substitute(system(g:ghc . ' -v0 --interactive', ':set'), '  ', '','g'), '\n'), 'v:val =~ "-f"')
+  let s:opts = filter(split(substitute(system(g:ghc . ' -v0 --interactive', ':set'), '  ', '','g'), '\n'), 'v:val =~ "-f"')
 else
-  let opts = ["-fglasgow-exts","-fallow-undecidable-instances","-fallow-overlapping-instances","-fno-monomorphism-restriction","-fno-mono-pat-binds","-fno-cse","-fbang-patterns","-funbox-strict-fields"]
+  let s:opts = ["-fglasgow-exts","-fallow-undecidable-instances","-fallow-overlapping-instances","-fno-monomorphism-restriction","-fno-mono-pat-binds","-fno-cse","-fbang-patterns","-funbox-strict-fields"]
 endif
+let s:opts = sort(s:opts)
 
 amenu ]OPTIONS_GHC.- :echo '-'<cr>
 aunmenu ]OPTIONS_GHC
-for o in opts
+for o in s:opts
   exe 'amenu ]OPTIONS_GHC.'.o.' :call append(0,"{-# OPTIONS_GHC '.o.' #-}")<cr>'
 endfor
 if has("gui_running")
@@ -467,8 +468,8 @@ endif
 amenu ]LANGUAGES_GHC.- :echo '-'<cr>
 aunmenu ]LANGUAGES_GHC
 if GHC_VersionGE([6,8])
-  let ghc_supported_languages = split(system(g:ghc . ' --supported-languages'),'\n')
-  for l in ghc_supported_languages
+  let s:ghc_supported_languages = sort(split(system(g:ghc . ' --supported-languages'),'\n'))
+  for l in s:ghc_supported_languages
     exe 'amenu ]LANGUAGES_GHC.'.l.' :call append(0,"{-# LANGUAGE '.l.' #-}")<cr>'
   endfor
   if has("gui_running")

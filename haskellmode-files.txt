@@ -64,6 +64,10 @@ doc/haskellmode.txt
 
 ---- change log
 
+17.06.2010
+  haskell_doc.vim: minor path changes for ghc-6.12.*
+  ghc.vim:         sort OPTIONS_GHC and LANGUAGE pragma menues (suggested by mkrauskopf)
+
 02/05/2009
   haskellmode.txt: mention b:ghc_staticoptions, provide example for setting default 
                     options (extra import path)
