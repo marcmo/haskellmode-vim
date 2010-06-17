@@ -243,7 +243,7 @@ endfunction
 
 function! GHC_Info(what)
   " call GHC_HaveTypes()
-  let output = system(g:ghc . ' ' . b:ghc_staticoptions . ' -v0 --interactive ' . expand("%"), ":i ". a:what)
+  let output = system(g:ghc . ' ' . b:ghc_staticoptions . ' -v0 --interactive ' . expand("%"), ":info ". a:what)
   return output
 endfunction
 
