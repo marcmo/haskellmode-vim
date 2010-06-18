@@ -111,6 +111,10 @@ function! GHC_ShowType(addTypeDecl)
 endfunction
 
 " show type of identifier under mouse pointer in balloon
+" TODO: it isn't a good idea to tie potentially time-consuming tasks
+"       (querying GHCi for the types) to cursor movements (#14). Currently,
+"       we ask the user to call :GHCReload explicitly. Should there be an
+"       option to reenable the old implicit querying?
 if has("balloon_eval")
   set ballooneval
   set balloondelay=600
@@ -125,11 +129,22 @@ if has("balloon_eval")
       let [start,symb,qual,unqual] = namsym
       let name  = qual=='' ? unqual : qual.'.'.unqual
       let pname = name " ( symb ? '('.name.')' : name )
-      silent call GHC_HaveTypes()
-      if has("balloon_multiline")
-        return (has_key(b:ghc_types,pname) ? split(b:ghc_types[pname],' -- ') : '') 
+      if b:ghc_types == {} 
+        redraw
+        echo "no type information (try :GHGReload)"
+      elseif (b:my_changedtick != b:changedtick)
+        redraw
+        echo "type information may be out of date (try :GHGReload)"
+      endif
+      " silent call GHC_HaveTypes()
+      if b:ghc_types!={}
+        if has("balloon_multiline")
+          return (has_key(b:ghc_types,pname) ? split(b:ghc_types[pname],' -- ') : '') 
+        else
+          return (has_key(b:ghc_types,pname) ? b:ghc_types[pname] : '') 
+        endif
       else
-        return (has_key(b:ghc_types,pname) ? b:ghc_types[pname] : '') 
+        return ''
       endif
     else
       return ''
@@ -180,6 +195,7 @@ command! GHCReload call GHC_BrowseAll()
 function! GHC_BrowseAll()
   " let imports = haskellmode#GatherImports()
   " let modules = keys(imports[0]) + keys(imports[1])
+  let b:my_changedtick = b:changedtick
   let imports = {} " no need for them at the moment
   let current = GHC_NameCurrent()
   let module = current==[] ? 'Main' : current[0]

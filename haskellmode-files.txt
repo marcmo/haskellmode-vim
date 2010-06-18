@@ -64,6 +64,11 @@ doc/haskellmode.txt
 
 ---- change log
 
+18.06.2010
+  ghc.vim:         don't trigger GHC_BrowseAll() from within GHC_TypeBalloon,
+                   as that ties a potentially long-running task to mouse
+                   motion; instead, just point to :GHGReload if necessary (#14)
+
 17.06.2010
   haskell_doc.vim: minor path changes for ghc-6.12.*
   ghc.vim:         sort OPTIONS_GHC and LANGUAGE pragma menues (suggested by mkrauskopf)
