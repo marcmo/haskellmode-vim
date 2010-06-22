@@ -153,3 +153,39 @@ function! haskellmode#UrlEncode(string)
   return url
 endfunction
 
+" TODO: we could have buffer-local settings, at the expense of
+"       reconfiguring for every new buffer.. do we want to?
+function! haskellmode#GHC()
+  if (!exists("g:ghc") || !executable(g:ghc)) 
+    if !executable('ghc') 
+      echoerr s:scriptname.": can't find ghc. please set g:ghc, or extend $PATH"
+      return 0
+    else
+      let g:ghc = 'ghc'
+    endif
+  endif    
+  return 1
+endfunction
+
+function! haskellmode#GHC_Version()
+  if !exists("g:ghc_version")
+    let g:ghc_version = substitute(system(g:ghc . ' --numeric-version'),'\n','','')
+  endif
+  return g:ghc_version
+endfunction
+
+function! haskellmode#GHC_VersionGE(target)
+  let current = split(haskellmode#GHC_Version(), '\.' )
+  let target  = a:target
+  for i in current
+    if ((target==[]) || (i>target[0]))
+      return 1
+    elseif (i==target[0])
+      let target = target[1:]
+    else
+      return 0
+    endif
+  endfor
+  return 1
+endfunction
+

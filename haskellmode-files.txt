@@ -64,6 +64,10 @@ doc/haskellmode.txt
 
 ---- change log
 
+22.06.2010
+  ghc.vim:         start caching GHC configuration info (supported languages
+                   and options) instead of asking GHC for every editing session (#8)
+
 18.06.2010
   ghc.vim:         don't trigger GHC_BrowseAll() from within GHC_TypeBalloon,
                    as that ties a potentially long-running task to mouse
