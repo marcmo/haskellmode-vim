@@ -67,6 +67,8 @@ doc/haskellmode.txt
 22.06.2010
   ghc.vim:         start caching GHC configuration info (supported languages
                    and options) instead of asking GHC for every editing session (#8)
+  haskellmode.vim: allow for import {-# SOURCE #-} in haskellmode#GatherImports
+                   (suggested by dmitri shkurko)
 
 18.06.2010
   ghc.vim:         don't trigger GHC_BrowseAll() from within GHC_TypeBalloon,

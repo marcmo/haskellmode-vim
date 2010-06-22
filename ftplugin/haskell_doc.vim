@@ -2,7 +2,7 @@
 " use haddock docs and index files
 " show documentation, complete & qualify identifiers 
 "
-" (Claus Reinke; last modified: 30/04/2009)
+" (Claus Reinke; last modified: 17/06/2009)
 " 
 " part of haskell plugins: http://projects.haskell.org/haskellmode-vim
 " please send patches to <claus.reinke@talk21.com>

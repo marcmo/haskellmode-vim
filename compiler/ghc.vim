@@ -2,7 +2,7 @@
 " Vim Compiler File
 " Compiler:	GHC
 " Maintainer:	Claus Reinke <claus.reinke@talk21.com>
-" Last Change:	30/04/2009
+" Last Change:	22/06/2010
 "
 " part of haskell plugins: http://projects.haskell.org/haskellmode-vim
 

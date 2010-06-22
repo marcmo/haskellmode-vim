@@ -1,7 +1,7 @@
 "
 " utility functions for haskellmode plugins
 "
-" (Claus Reinke; last modified: 23/04/2009)
+" (Claus Reinke; last modified: 22/06/2010)
 " 
 " part of haskell plugins: http://projects.haskell.org/haskellmode-vim
 " please send patches to <claus.reinke@talk21.com>
