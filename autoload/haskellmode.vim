@@ -63,7 +63,7 @@ function! haskellmode#GatherImports()
     let res = haskellmode#GatherImport(i)
     if !empty(res)
       let [i,import] = res
-      let prefixPat = '^import\s*\(qualified\)\?\s\+'
+      let prefixPat = '^import\s*\%({-#\s*SOURCE\s*#-}\)\?\(qualified\)\?\s\+'
       let modulePat = '\([A-Z][a-zA-Z0-9_''.]*\)'
       let asPat     = '\(\s\+as\s\+'.modulePat.'\)\?'
       let hidingPat = '\(\s\+hiding\s*\((.*)\)\)\?'
