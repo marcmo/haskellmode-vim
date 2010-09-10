@@ -64,6 +64,9 @@ doc/haskellmode.txt
 
 ---- change log
 
+10.09.2010
+  ghc.vim:         be more helpful in _t if type is unknown
+
 22.06.2010
   ghc.vim:         start caching GHC configuration info (supported languages
                    and options) instead of asking GHC for every editing session (#8)
