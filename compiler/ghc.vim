@@ -87,10 +87,17 @@ function! GHC_ShowType(addTypeDecl)
   let [_,symb,qual,unqual] = namsym
   let name  = qual=='' ? unqual : qual.'.'.unqual
   let pname = ( symb ? '('.name.')' : name ) 
-  call GHC_HaveTypes()
+  let ok    = GHC_HaveTypes()
   if !has_key(b:ghc_types,name)
-    redraw
-    echo pname "type not known"
+    redraw " this happens to hide messages from GHC_HaveTypes
+    if &modified 
+      let comment = " (buffer has unsaved changes)"
+    elseif !ok
+      let comment = " (try :make to see any GHCi errors)"
+    else 
+      let comment = ""
+    endif
+    echo pname "type not known".comment
   else
     redraw
     for type in split(b:ghc_types[name],' -- ')
@@ -170,6 +177,8 @@ function! GHC_HaveTypes()
   if b:ghc_types == {} && (b:my_changedtick != b:changedtick)
     let b:my_changedtick = b:changedtick
     return GHC_BrowseAll()
+  else
+    return 1
   endif
 endfunction
 
@@ -217,6 +226,9 @@ endfunction
 function! GHC_BrowseBangStar(module)
   redraw
   echo "browsing module " a:module
+  " TODO: this doesn't work if a:module is loaded compiled - we
+  "       could try to give a more helpful error message, or use
+  "       -fforce-recomp directly
   let command = ":browse! *" . a:module
   let orig_shellredir = &shellredir
   let &shellredir = ">" " ignore error/warning messages, only output or lack of it
@@ -250,6 +262,7 @@ function! GHC_ProcessBang(module,output)
   let definedPat  = '^-- defined locally'
   let importedPat = '^-- imported via \(.*\)'
   if !(b=~commentPat)
+    redraw
     echo s:scriptname.": GHCi reports errors (try :make?)"
     return 0
   endif
@@ -300,6 +313,7 @@ function! GHC_Process(imports,output)
   let modPat  = '^-- \(\S*\)'
   " add '-- defined locally' and '-- imported via ..'
   if !(b=~modPat)
+    redraw
     echo s:scriptname.": GHCi reports errors (try :make?)"
     return 0
   endif
