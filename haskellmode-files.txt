@@ -64,6 +64,13 @@ doc/haskellmode.txt
 
 ---- change log
 
+17.11.2010
+  haskell_doc:     with GHC-7.0.1, the format of Haddock HTML-index files has
+                    changed - adapt our scraping code (ProcessHaddockIndexes3);
+                    in future, try switching to the new Haddock API
+                    (http://trac.haskell.org/haddock/ticket/157), even if that
+                    means adding Haskell tools to haskellmode
+
 18.09.2010
   autoload/haskellmode.vim: fix fileformat to unix
 
