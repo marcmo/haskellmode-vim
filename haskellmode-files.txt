@@ -64,6 +64,9 @@ doc/haskellmode.txt
 
 ---- change log
 
+18.09.2010
+  autoload/haskellmode.vim: fix fileformat to unix
+
 10.09.2010
   ghc.vim:         be more helpful in _t if type is unknown
 
