@@ -64,6 +64,16 @@ doc/haskellmode.txt
 
 ---- change log
 
+11.12.2010
+  haskell_doc:    be slightly more forgiving in finding insert positions
+                    for Import (_i,_im,_iq,_iqm)
+  autoload/haskellmode: reduce whitespace collected by GatherImports
+
+06.12.2010
+  haskell_doc:     our new haddock index generator adds package information to
+                    module names; adapt Haddock,Import,Qualify,IDoc,
+                    MkHaddockModuleIndex
+
 17.11.2010
   haskell_doc:     with GHC-7.0.1, the format of Haddock HTML-index files has
                     changed - adapt our scraping code (ProcessHaddockIndexes3);

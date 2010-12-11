@@ -2,7 +2,7 @@
 " use haddock docs and index files
 " show documentation, complete & qualify identifiers 
 "
-" (Claus Reinke; last modified: 17/06/2009)
+" (Claus Reinke; last modified: 11/12/2010)
 " 
 " part of haskell plugins: http://projects.haskell.org/haskellmode-vim
 " please send patches to <claus.reinke@talk21.com>
@@ -823,9 +823,19 @@ function! Qualify()
   endif
 endfunction
 
+function! FindImportPosition()
+  let save_cursor = getpos(".")
+  let line1 = search('\%1c\(\<import\>\|\<module\>\|{-# OPTIONS\|{-# LANGUAGE\)','b')
+  " jump over possible multiline statements
+  let line2 = search('^\(\s*\|\S.*\)$','')
+  call setpos('.', save_cursor)
+  " insert position is after statement, before any following declarations
+  return ( line2 > line1 ? line2-1 : line1 )
+endfunction
+
 " create (qualified) import for a (qualified) name
-" TODO: refine search patterns, to avoid misinterpretation of
-"       oddities like import'Neither or not'module
+" TODO: - refine search patterns, to avoid misinterpretation of
+"         oddities like import'Neither or not'module
 map <LocalLeader>i :call Import(0,0)<cr>
 map <LocalLeader>im :call Import(1,0)<cr>
 map <LocalLeader>iq :call Import(0,1)<cr>
@@ -846,7 +856,7 @@ function! Import(module,qualified)
   let qualified  = a:qualified ? 'qualified ' : ''
 
   if qual!=''
-    exe 'call append(search(''\%1c\(\<import\>\|\<module\>\|{-# OPTIONS\|{-# LANGUAGE\)'',''nb''),''import '.qualified.qual.importlist.''')'
+    exe 'call append(FindImportPosition(),''import '.qualified.qual.importlist.''')'
     return
   endif
 
@@ -857,15 +867,14 @@ function! Import(module,qualified)
   let keylist = map(deepcopy(keys(dict)),'substitute(v:val,"\\[.\\] (.*)","","")')
   if has("gui_running")
     for key in keylist
-      " exe 'amenu ]Popup.'.escape(key,'\.').' :call append(search("\\%1c\\(import\\\\|module\\\\|{-# OPTIONS\\)","nb"),"import '.key.importlist.'")<cr>'
-      exe 'amenu ]Popup.'.escape(key,'\.').' :call append(search(''\%1c\(\<import\>\\|\<module\>\\|{-# OPTIONS\\|{-# LANGUAGE\)'',''nb''),''import '.qualified.key.escape(importlist,'|').''')<cr>'
+      exe 'amenu ]Popup.'.escape(key,'\.').' :call append(FindImportPosition(),''import '.qualified.key.escape(importlist,'|').''')<cr>'
     endfor
     popup ]Popup
   else
     let s:choices = keylist
     let key = input('import '.name.' from: ','','customlist,CompleteAux')
     if key!=''
-      exe 'call append(search(''\%1c\(\<import\>\|\<module\>\|{-# OPTIONS\|{-# LANGUAGE\)'',''nb''),''import '.qualified.key.importlist.''')'
+      exe 'call append(FindImportPosition(),''import '.qualified.key.importlist.''')'
     endif
   endif
 endfunction
