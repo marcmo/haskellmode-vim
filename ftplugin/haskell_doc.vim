@@ -251,7 +251,7 @@ function! IDoc(name,...)
   let choices = HaddockIndexLookup(a:name)
   if choices=={} | return | endif
   if a:0==0
-    let keylist = map(deepcopy(keys(choices)),'substitute(v:val,"\\[.\\] (.*)","","")')
+    let keylist = map(deepcopy(keys(choices)),'substitute(v:val,"\\[.\\]\\( (.*)\\)\\?","","")')
     let choice = inputlist(keylist)
   else
     let choice = a:1
@@ -525,7 +525,7 @@ function! MkHaddockModuleIndex()
     for module in keys(dict)
       let html = dict[module]
       let html   = substitute(html  ,'#.*$','','')
-      let module = substitute(module,'\[.\] (.*)','','')
+      let module = substitute(module,'\[.\]\( (.*)\)\?','','')
       let ml = matchlist(html,'libraries/\([^\/]*\)[\/]')
       if ml!=[]
         let [_,package;x] = ml
@@ -581,7 +581,7 @@ function! Haddock()
   if dict=={} | return | endif
   " for qualified items, narrow results to possible imports that provide qualifier
   let filteredKeys = filter(copy(keys(dict))
-                         \ ,'match(asm,substitute(v:val,''\[.\] (.*)'','''',''''))!=-1') 
+                         \ ,'match(asm,substitute(v:val,''\[.\]\( (.*)\)\?'','''',''''))!=-1') 
   let keys = (qual!='') ?  filteredKeys : keys(dict)
   if (keys==[]) && (qual!='')
     echoerr qual.'.'.unqual.' not found in imports'
@@ -785,7 +785,7 @@ function! Qualify()
   let prefix       = (start<=1 ? '' : getline(line)[0:start-2] )
   let dict   = HaddockIndexLookup(name)
   if dict=={} | return | endif
-  let keylist = map(deepcopy(keys(dict)),'substitute(v:val,"\\[.\\] (.*)","","")')
+  let keylist = map(deepcopy(keys(dict)),'substitute(v:val,"\\[.\\]\\( (.*)\\)\\?","","")')
   let imports = haskellmode#GatherImports()
   let qualifiedImports = []
   for qualifiedImport in keys(imports[1])
@@ -864,7 +864,7 @@ function! Import(module,qualified)
   let prefix = getline(line)[0:start-1]
   let dict   = HaddockIndexLookup(name)
   if dict=={} | return | endif
-  let keylist = map(deepcopy(keys(dict)),'substitute(v:val,"\\[.\\] (.*)","","")')
+  let keylist = map(deepcopy(keys(dict)),'substitute(v:val,"\\[.\\]\\( (.*)\\)\\?","","")')
   if has("gui_running")
     for key in keylist
       exe 'amenu ]Popup.'.escape(key,'\.').' :call append(FindImportPosition(),''import '.qualified.key.escape(importlist,'|').''')<cr>'
