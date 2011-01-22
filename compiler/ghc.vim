@@ -183,7 +183,7 @@ function! GHC_HaveTypes()
 endfunction
 
 " update b:ghc_types after successful make
-au QuickFixCmdPost make if GHC_CountErrors()==0 | silent call GHC_BrowseAll() | endif
+au QuickFixCmdPost make if exists("current_compiler") && current_compiler=="ghc" && (GHC_CountErrors()==0) | silent call GHC_BrowseAll() | endif
 
 " count only error entries in quickfix list, ignoring warnings
 function! GHC_CountErrors()
