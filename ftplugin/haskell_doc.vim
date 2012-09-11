@@ -750,7 +750,7 @@ function! CompleteHaddock(findstart, base)
     return res
   endif
 endfunction
-setlocal completefunc=CompleteHaddock
+" setlocal completefunc=CompleteHaddock
 "
 " Vim's default completeopt is menu,preview
 " you probably want at least menu, or you won't see alternatives listed

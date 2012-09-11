@@ -22,7 +22,7 @@ if (!exists("b:ghc_staticoptions"))
 endif
 
 " set makeprg (for quickfix mode) 
-execute 'setlocal makeprg=' . g:ghc . '\ ' . escape(b:ghc_staticoptions,' ') .'\ -e\ :q\ %'
+execute 'setlocal makeprg=' . g:ghc . '\ ' . escape(b:ghc_staticoptions,' ') .'\ -i..\ -e\ :q\ %'
 "execute 'setlocal makeprg=' . g:ghc .'\ -e\ :q\ %'
 "execute 'setlocal makeprg=' . g:ghc .'\ --make\ %'
 
@@ -64,7 +64,7 @@ endif
 let g:haskell_functions = "ghc"
 
 " avoid hit-enter prompts
-set cmdheight=3
+" set cmdheight=3
 
 " edit static GHC options
 " TODO: add completion for options/packages?
